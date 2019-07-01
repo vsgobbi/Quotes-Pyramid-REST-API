@@ -35,8 +35,3 @@ class RequesterLib:
             return json_data
         print(get_quote_number.status_code)
         return {"error": get_quote_number.status_code}
-
-
-classObj = RequesterLib()
-classObj.get_quotes()
-classObj.get_quote(31)
