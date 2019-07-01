@@ -10,3 +10,6 @@
 
 #Eggs:info
 *.egg-info
+
+#Git files
+.git/*
