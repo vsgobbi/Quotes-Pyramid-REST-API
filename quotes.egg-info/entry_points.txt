@@ -1,0 +1,6 @@
+[console_scripts]
+initialize_wiki2_db = wiki2.scripts.initialize_db:main
+
+[paste.app_factory]
+main = quotes:main
+

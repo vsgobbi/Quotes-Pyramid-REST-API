@@ -1,0 +1,12 @@
+#Pycharm files:
+.idea*
+.idea/
+
+#Virtual env:
+.venv/*
+
+#Sqlite file
+*.sqlit
+
+#Eggs:info
+*.egg-info

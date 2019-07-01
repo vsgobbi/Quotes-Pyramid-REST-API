@@ -1,0 +1,14 @@
+README.md
+setup.py
+quotes/__init__.py
+quotes/app.py
+quotes/main.py
+quotes/models.py
+quotes/routes.py
+quotes/views.py
+quotes.egg-info/PKG-INFO
+quotes.egg-info/SOURCES.txt
+quotes.egg-info/dependency_links.txt
+quotes.egg-info/entry_points.txt
+quotes.egg-info/requires.txt
+quotes.egg-info/top_level.txt
