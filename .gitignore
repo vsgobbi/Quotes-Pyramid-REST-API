@@ -4,6 +4,7 @@
 
 #Virtual env:
 .venv/*
+venv/*
 
 #Sqlite file
 *.sqlit
