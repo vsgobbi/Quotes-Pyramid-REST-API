@@ -5,7 +5,6 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 requires = ["pyramid", "waitress", "sqlalchemy", "transaction", "zope.sqlalchemy"]
 
-
 setup(name="quotes",
       version="1.0",
       description="pyramid framework rest api sample using sqlalchemy",
@@ -25,4 +24,3 @@ setup(name="quotes",
             ],
       },
       )
-
