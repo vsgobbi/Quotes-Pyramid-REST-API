@@ -8,6 +8,7 @@ venv/*
 
 #Sqlite file
 *.sqlit
+sqliquotes.sqlite
 
 #Eggs:info
 *.egg-info
