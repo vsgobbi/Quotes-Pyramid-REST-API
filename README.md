@@ -126,4 +126,4 @@ Reach out to me at one of the following places!
 ## License
 
 - **[GPL license](https://www.gnu.org/licenses/gpl-3.0)**
-- Author:<a href="https://github.com/vsgobbi" target="_blank">Vitor Sgobbi</a>. 2019.
+- Author: <a href="https://github.com/vsgobbi" target="_blank">Vitor Sgobbi</a>
