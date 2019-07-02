@@ -68,13 +68,13 @@ pip --version
 ```shell     
 pip install -r requirements.txt
 ```
-- Initialize SQLAlchemy database and migration
-```shell
-python initialize_db.py development.ini
-```
 - Install and export egg.info of project
 ```shell
 pip install -e .
+```
+- Initialize SQLAlchemy database and migration
+```shell
+python initialize_db.py development.ini
 ```
 - Init database migration to create tables
 ```shell
@@ -98,6 +98,11 @@ python -m unittest discover quotes/
 
 ---
 ## Usage
+
+#### Access routes with curl: 
+```shell     
+curl localhost:6543
+```
 
 #### How to use requester library:
 ```python
