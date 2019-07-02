@@ -99,10 +99,11 @@ python -m unittest discover quotes/
 ---
 ## Usage
 
-#### Access routes with curl: 
+#### Test index route with curl: 
 ```shell     
 curl localhost:6543
 ```
+#### Access created routes with curl, python requests or postman: 
 
 #### How to use requester library:
 ```python
