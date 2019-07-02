@@ -1,19 +1,9 @@
 import os
 import sys
 import transaction
-
 from sqlalchemy import engine_from_config
-
-from pyramid.paster import (
-    get_appsettings,
-    setup_logging,
-    )
-
-from quotes.models import (
-    DBSession,
-    Quote,
-    Base,
-    )
+from pyramid.paster import get_appsettings, setup_logging
+from quotes.models import DBSession, Quote, Session, Base
 
 
 def usage(argv):
@@ -33,5 +23,7 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
     with transaction.manager:
-        model = Quote(title='Root', description='<p>Some quote</p>', created_at=None)
-        DBSession.add(model)
+        modelQuote = Quote(title='Root', description='Some example quote', created_at=None)
+        modelSession = Session(page='http://localhost:6543/home', counter='1', created_at=None)
+        DBSession.add(modelQuote)
+        DBSession.add(modelSession)

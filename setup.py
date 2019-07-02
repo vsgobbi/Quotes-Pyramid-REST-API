@@ -8,7 +8,7 @@ requires = ["pyramid", "waitress", "sqlalchemy", "transaction", "zope.sqlalchemy
 
 setup(name="quotes",
       version="1.0",
-      description="quotes restful api sample",
+      description="pyramid framework rest api sample using sqlalchemy",
       install_requires=requires,
       author="vsgobbi",
       author_email="sgobbivitor@gmail.com",
@@ -21,7 +21,7 @@ setup(name="quotes",
                   'main = quotes:main',
             ],
             'console_scripts': [
-                  'initialize_wiki2_db=wiki2.scripts.initialize_db:main',
+                  'initialize_db=initialize_db:main',
             ],
       },
       )

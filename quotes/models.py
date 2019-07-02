@@ -1,7 +1,8 @@
+import transaction
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
+from zope.sqlalchemy import ZopeTransactionExtension, mark_changed
 from pyramid.security import Allow, Everyone
 from datetime import datetime
 
@@ -41,9 +42,9 @@ class Quote(Base):
             quote = {"title": key, "description": value}
             entity = Quote.from_json(quote)
             DBSession.add(entity)
-            DBSession.flush()
             print("Saved entity:", entity.to_json())
-        return entity
+        transaction.commit()
+        return True
 
     def to_json(self):
         to_serialize = ['id', 'title', 'description', 'created_at']
@@ -62,17 +63,30 @@ class Session(Base):
 
     __tablename__ = "Session"
     id = Column(Integer, primary_key=True)
-    page = Column(Text)
-    datetime = Column(Text)
+    page = Column(Text, unique=True)
+    created_at = Column(Text)
+    counter = Column(Integer)
 
-    def __init__(self, id, page, datetime):
-        self.id = id
+    def __init__(self, page, counter, created_at):
         self.page = page
-        self.datetime = datetime
+        self.counter = counter
+        self.created_at = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
+
+    @classmethod
+    def from_json(cls, data):
+        return cls(**data, created_at=Session.created_at)
+
+    def to_json(self):
+        to_serialize = ['id', 'page', 'counter', 'created_at']
+        dict = {}
+        for attr_name in to_serialize:
+            dict[attr_name] = getattr(self, attr_name)
+        return dict
 
     def to_dict(self):
         return {
             'id': self.id,
             'page': self.page,
-            'datetime': self.datetime,
+            "counter": self.counter,
+            'datetime': self.created_at
         }

@@ -14,3 +14,7 @@ venv/*
 
 #Git files
 .git/*
+
+#Cached files
+quotes/__pycache__/*
+__pycache__/*

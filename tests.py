@@ -1,10 +1,11 @@
 import unittest
 import transaction
+import requests
 from pyramid import testing
 from sqlalchemy import create_engine
 from sqlalchemy.exc import DBAPIError
 from quotes.models import DBSession, Base, Quote
-from quotes.views import QuoteView, index
+from quotes.views import QuoteView, SessionView
 from random import randint
 
 
@@ -31,7 +32,7 @@ class TestSqlAlchemy(unittest.TestCase):
             DBSession.add(model)
             DBSession.flush()
             quote_id = DBSession.query(Quote).first().to_json()
-            json_quote = DBSession.query(Quote).filter_by(id='1').first().to_dict()
+            json_quote = DBSession.query(Quote).filter_by(id="1").first().to_dict()
             description = DBSession.query(Quote.description).order_by(Quote.created_at).first()
         print(quote_id)
         print(json_quote)
@@ -41,12 +42,12 @@ class TestSqlAlchemy(unittest.TestCase):
         self.config = testing.setUp()
         with transaction.manager:
             try:
-                DBSession.add(Quote(title='quote1',
-                                description='If you don’t like unit testing your product,'
-                                            ' most likely your customers won’t like to test it either.',
+                DBSession.add(Quote(title="quote1",
+                                description="If you don’t like unit testing your product,"
+                                            " most likely your customers won’t like to test it either.",
                                 created_at=None))
-                DBSession.add(Quote(title='quote2',
-                                description='Software testing proves the existence of bugs not their absence.',
+                DBSession.add(Quote(title="quote2",
+                                description="Software testing proves the existence of bugs not their absence.",
                                 created_at=None))
                 DBSession.flush()
             except DBAPIError as exec:
@@ -120,18 +121,19 @@ class TestQuotesAPI(unittest.TestCase):
 
     def test_index_title(self):
         request = testing.DummyRequest()
-        response = index(request)
+        objSession = SessionView(request=request)
+        response = objSession.home()
         print(response)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(type(response), dict)
 
     def test_post_quote(self):  # Return created status (201)
         data = {"quotes": {"quote0": "Errors should never pass silently."}}
         print("items: ", data.items())
-        content_type = 'application/json'
+        content_type = "application/json"
         request = testing.DummyRequest(json=data, accept=content_type, content_type=content_type)
         view_obj = QuoteView(request)
         request.matchdict["quotes"] = data
-        response = view_obj.quotes_post()
+        response = view_obj.post_quotes()
         self.assertEqual(response.status_code, 201)
 
     def test_post_quotes(self):  # Return created status (201)
@@ -139,11 +141,11 @@ class TestQuotesAPI(unittest.TestCase):
                            "quote2": "Explicit is better than implicit.",
                            "quote3": "Simple is better than complex."}
                 }
-        content_type = 'application/json'
+        content_type = "application/json"
         request = testing.DummyRequest(json=data, accept=content_type, content_type=content_type)
         view_obj = QuoteView(request)
         request.matchdict["quotes"] = data
-        response = view_obj.quotes_post()
+        response = view_obj.post_quotes()
         self.assertEqual(response.status_code, 201)
 
     def test_post_quotes_raw(self):  # Return bad request(400) due to wrong content-type
@@ -152,17 +154,16 @@ class TestQuotesAPI(unittest.TestCase):
         request = testing.DummyRequest(json=context, accept=content_type, content_type=content_type)
         view_obj = QuoteView(request)
         request.matchdict["quote"] = context
-        response = view_obj.quotes_post()
+        response = view_obj.post_quotes()
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.body.decode(), "{'error': 'content type must be json'}")
 
     def test_post_malformed_quote(self):  # Return bad request(400) due to wrong json format
         data = """{"quote0": }"""
-        content_type = 'application/json'
+        content_type = "application/json"
         request = testing.DummyRequest(json=data, accept=content_type, content_type=content_type)
         view_obj = QuoteView(request)
         request.matchdict["quotes"] = data
-        response = view_obj.quotes_post()
+        response = view_obj.post_quotes()
         print(response.body)
         self.assertEqual(response.status_code, 400)
 
@@ -177,7 +178,7 @@ class TestQuotesAPI(unittest.TestCase):
 
         request = testing.DummyRequest()
         view_obj = QuoteView(request=request)
-        response = view_obj.quotes()
+        response = view_obj.get_quotes()
         self.assertEqual(response.status_code, 200)
         if "200" in str(request.response):
             return True
@@ -188,26 +189,68 @@ class TestQuotesAPI(unittest.TestCase):
         quote2 = Quote("quote22", description="somequote22", created_at=None)
         DBSession.add(quote2)
         DBSession.flush()
-
         id = 2
         request = testing.DummyRequest()
         request.matchdict["id"] = id
         view_obj = QuoteView(request)
-        response = request.response
-        response_content = view_obj.quote_id()
-        print(response_content)
-        #self.assertEqual(response.status_code, 200)
-        #self.assertEqual(type(response_content), dict)
+        response_content = view_obj.get_quote()
+        self.assertEqual(response_content.status_code, 200)
 
     def test_delete_quotes(self):
         quote = Quote("quote1", description="somequote", created_at=None)
         DBSession.add(quote)
         DBSession.flush()
         request = testing.DummyRequest()
-        request.matchdict['id'] = 1
+        request.matchdict["id"] = 1
         view_obj = QuoteView(request)
-        response = view_obj.delete()
+        response = view_obj.delete_quote()
         print(response)
         self.assertEqual(type(response), dict)
+        if "200" in str(request.response):
+            return True
+
+
+class TestSessionAPI(unittest.TestCase):
+
+    def setUp(self):
+        request = testing.DummyRequest()
+        self.config = testing.setUp(request=request)
+        self.config = testing.setUp()
+        self.config.include("pyramid_chameleon")
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_get_sessions(self):
+        request = testing.DummyRequest()
+        session = requests.Session()
+        view_obj = SessionView(request=request)
+        response = view_obj.get_sessions()
+        print(session.cookies.get_dict())
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_session(self):
+        request = testing.DummyRequest()
+        session = requests.Session()
+        request.matchdict["id"] = 1
+        view_obj = SessionView(request=request)
+        response = view_obj.get_session()
+        print(response)
+        print(session.cookies.get_dict())
+
+    def test_session_counter(self):
+        request = testing.DummyRequest()
+        view_obj = SessionView(request=request)
+        response = view_obj.counter
+        print(response)
+        self.assertEqual(response, 1)
+
+    def test_session_logger(self):
+        request = testing.DummyRequest()
+        session = requests.Session()
+        view_obj = SessionView(request=request)
+        response = view_obj.sesssions_log_viewer()
+        self.assertEqual(response.status_code, 200)
+        print(session.cookies.get_dict())
         if "200" in str(request.response):
             return True

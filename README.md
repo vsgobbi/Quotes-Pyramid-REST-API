@@ -16,7 +16,6 @@ import this
 - [Usage](#usage)
 - [Tests](#tests)
 - [Features](#features)
-- [Contributing](#contributing)
 - [License](#license)
 
 
@@ -36,7 +35,13 @@ import this
 - Firstly, clone this repo to your local machine
 
 ```shell
-git clone $bitbucketURL
+git clone git@github.com:vsgobbi/quotes_pyramid_api.git
+
+```
+or 
+
+```shell
+git clone https://github.com/vsgobbi/quotes_pyramid_api.git
 ```
 ---
 
@@ -63,19 +68,19 @@ pip --version
 ```shell     
 pip install -r requirements.txt
 ```
-- Initialize SQLAlchemy database 
+- Initialize SQLAlchemy database and migration
 ```shell
-python initDB.py quotes.ini
+python initialize_db.py development.ini
 ```
 - Install and export egg.info of project
 ```shell
 pip install -e .
 ```
-- Init database migration
+- Init database migration to create tables
 ```shell
-python initialize_db development.ini
+initialize_db development.ini
 ```
-- Start server
+- Start server (with development configs)
 ```shell
 pserve development.ini --reload
 ```
@@ -103,7 +108,6 @@ from lib.requester import get_quotes, get_quote
 ```python
 python -m unittest discover .
 ```
-
 
 ## Support
 

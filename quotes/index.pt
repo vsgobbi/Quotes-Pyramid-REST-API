@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <Title>Desafio Web 1.0</Title>
+</head>
+<body>
+<br><br><br>
+<p>Session registry counter: ${view.counter}</p>
+</body>
+</html>

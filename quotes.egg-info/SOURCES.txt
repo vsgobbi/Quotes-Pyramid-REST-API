@@ -1,5 +1,7 @@
 README.md
 setup.py
+libs/__init__.py
+libs/requester.py
 quotes/__init__.py
 quotes/app.py
 quotes/main.py
