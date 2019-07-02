@@ -23,8 +23,6 @@ import this
 
 <!-- [![FVCproductions](https://avatars1.githubusercontent.com/u/4284691?v=3&s=200)](http://fvcproductions.com) -->
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](http://img.shields.io/travis/badges/badgerbadgerbadger.svg?style=flat-square)](https://travis-ci.org/badges/badgerbadgerbadger)
-[![Coverage Status](http://img.shields.io/coveralls/badges/badgerbadgerbadger.svg?style=flat-square)](https://coveralls.io/r/badges/badgerbadgerbadger) 
 
 
 ---
@@ -103,7 +101,7 @@ python -m unittest discover quotes/
 ```shell     
 curl localhost:6543
 ```
-#### Access created routes with curl, python requests or postman: 
+#### Access created routes with curl, python requests or postman
 
 #### How to use requester library:
 ```python
@@ -127,6 +125,5 @@ Reach out to me at one of the following places!
 
 ## License
 
- [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 - **[GPL license](https://www.gnu.org/licenses/gpl-3.0)**
-- Copyright 2019 © <a href="https://github.com/vsgobbi" target="_blank">Vitor Sgobbi</a>.
+- Author:<a href="https://github.com/vsgobbi" target="_blank">Vitor Sgobbi</a>. 2019.
