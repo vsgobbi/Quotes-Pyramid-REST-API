@@ -54,7 +54,7 @@ class QuoteView(object):
                         charset="UTF-8",
                         body=json.dumps({"error": "quote {id} not found".format(id=id)}))
 
-    @view_config(request_method="DELETE")
+    @view_config(route_name="delete_quote", renderer="json", request_method="DELETE")
     def delete_quote(self):
         id = self.request.matchdict["id"]
         if id:
@@ -62,7 +62,11 @@ class QuoteView(object):
             if obj:
                 try:
                     DBSession.delete(obj)
-                    return {"deleted": obj.to_dict()}
+                    transaction.commit()
+                    return Response(status=200,
+                                    content_type="application/json",
+                                    charset="UTF-8",
+                                    body=json.dumps({"deleted": obj.to_dict()}))
                 except DBAPIError as exec:
                     return Response(status=400,
                                     body=json.dumps({"error": exec.args}))
@@ -161,9 +165,6 @@ class SessionView:
         str_page = str(self.request.url)
         try:
             save_session = {"counter": session["counter"], "page": str_page}
-            to_entity = Session.from_json(save_session)
-            DBSession.add(to_entity)
-
             update_entity = DBSession.query(Session).filter_by(page=str_page).first()
             update_entity.counter += 1
             logging.debug("Saved session register: ", save_session)
@@ -225,11 +226,3 @@ class SessionView:
                         content_type="application/json",
                         charset="UTF-8",
                         body=json.dumps({"error": "session not found"}))
-
-    @view_config(route_name="sessionlogs")
-    def sesssions_log_viewer(self):
-        content_type = 'text/plain'
-        self.log.debug('Returning: %s (content-type: %s)', "Testing", content_type)
-        self.request.response.content_type = content_type
-        print(self.request.response)
-        return json.dumps(self.request.response)

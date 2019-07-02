@@ -23,7 +23,7 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
     with transaction.manager:
-        modelQuote = Quote(title='Root', description='Some example quote', created_at=None)
+        modelQuote = Quote(title='Root', description='Use Linux and avoid the Gates of Hell.', created_at=None)
         modelSession = Session(page='http://localhost:6543/home', counter='1', created_at=None)
         DBSession.add(modelQuote)
         DBSession.add(modelSession)
