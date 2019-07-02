@@ -15,7 +15,6 @@ pyramid-chameleon==0.3
 pyramid-debugtoolbar==4.5
 pyramid-jinja2==2.8
 pyramid-mako==1.0.2
--e git+https://vitorsgobbi@bitbucket.org/vitorsgobbi/quotes.git@3e19ba4b91b12841d55ba71b2e0efab2e9480da4#egg=quotes
 repoze.lru==0.7
 requests==2.22.0
 SQLAlchemy==1.3.5
