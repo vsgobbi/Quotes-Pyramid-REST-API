@@ -42,11 +42,11 @@ class TestSqlAlchemy(unittest.TestCase):
         self.config = testing.setUp()
         with transaction.manager:
             try:
-                DBSession.add(Quote(title="quote1",
+                DBSession.add(Quote(title="quote_teste1",
                                 description="If you don’t like unit testing your product,"
                                             " most likely your customers won’t like to test it either.",
                                 created_at=None))
-                DBSession.add(Quote(title="quote2",
+                DBSession.add(Quote(title="quote_teste2",
                                 description="Software testing proves the existence of bugs not their absence.",
                                 created_at=None))
                 DBSession.flush()
@@ -56,11 +56,11 @@ class TestSqlAlchemy(unittest.TestCase):
     def test_populate_and_queryDB(self):
         self.config = testing.setUp()
         with transaction.manager:
-            added_quote1 = Quote(title="quote3",
+            added_quote1 = Quote(title="quote_teste3",
                                  description="“All code is guilty, until proven innocent.”",
                                  created_at=None
                                  )
-            added_quote2 = Quote(title="quote4",
+            added_quote2 = Quote(title="quote_teste4",
                                  description="“First, solve the problem. Then, write the code.”",
                                  created_at=None)
             DBSession.add(added_quote1)
@@ -81,7 +81,7 @@ class TestSqlAlchemy(unittest.TestCase):
         self.config = testing.setUp()
         id = 20
         for i in range(1, 5):
-            quote = Quote(title="quote{0}".format(id), description="foo{0}".format(id), created_at=None)
+            quote = Quote(title="quote_teste{0}".format(id), description="foo{0}".format(id), created_at=None)
             DBSession.add(quote)
             DBSession.flush()
             id += 1
@@ -98,7 +98,7 @@ class TestSqlAlchemy(unittest.TestCase):
         self.config = testing.setUp()
         id = 10
         for i in range(15, 18):
-            quote = Quote("quote{0}".format(id), description="foo{0}".format(id), created_at=None)
+            quote = Quote("quote_teste{0}".format(id), description="foo{0}".format(id), created_at=None)
             DBSession.add(quote)
             DBSession.flush()
             id += 1
@@ -197,7 +197,7 @@ class TestQuotesAPI(unittest.TestCase):
         self.assertEqual(response_content.status_code, 200)
 
     def test_delete_quotes(self):
-        quote = Quote("quote1", description="somequote", created_at=None)
+        quote = Quote("quote_test1", description="somequote", created_at=None)
         DBSession.add(quote)
         DBSession.flush()
         request = testing.DummyRequest()
@@ -205,7 +205,8 @@ class TestQuotesAPI(unittest.TestCase):
         view_obj = QuoteView(request)
         response = view_obj.delete_quote()
         print(response)
-        self.assertEqual(type(response), dict)
+        print(type(response.body))
+        self.assertEqual(response.status_code, 200)
         if "200" in str(request.response):
             return True
 
@@ -244,13 +245,3 @@ class TestSessionAPI(unittest.TestCase):
         response = view_obj.counter
         print(response)
         self.assertEqual(response, 1)
-
-    def test_session_logger(self):
-        request = testing.DummyRequest()
-        session = requests.Session()
-        view_obj = SessionView(request=request)
-        response = view_obj.sesssions_log_viewer()
-        self.assertEqual(response.status_code, 200)
-        print(session.cookies.get_dict())
-        if "200" in str(request.response):
-            return True
